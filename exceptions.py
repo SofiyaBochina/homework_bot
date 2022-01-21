@@ -6,5 +6,9 @@ class ServerError(Exception):
     pass
 
 
-class DictIsEmptyError(Exception):
+class TelegramError(Exception):
+    pass
+
+
+class ParsingError(Exception):
     pass
