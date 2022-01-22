@@ -30,7 +30,7 @@ HOMEWORK_STATUSES = {
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO,
-    filename='main.log',
+    filename=os.path.join(os.path.dirname(__file__), 'main.log'),
     filemode='w'
 )
 logger = logging.getLogger(__name__)
@@ -135,21 +135,17 @@ def parse_status(homework):
 
 def check_tokens():
     """Проверка наличия токенов."""
-    if PRACTICUM_TOKEN is None:
-        logger.critical(
-            'Отсутствует переменная окружения: PRACTICUM_TOKEN'
-        )
-        return False
-    if TELEGRAM_TOKEN is None:
-        logger.critical(
-            'Отсутствует переменная окружения: TELEGRAM_TOKEN'
-        )
-        return False
-    if TELEGRAM_CHAT_ID is None:
-        logger.critical(
-            'Отсутствует переменная окружения: TELEGRAM_CHAT_ID'
-        )
-        return False
+    secret_list = {
+        'PRACTICUM_TOKEN': PRACTICUM_TOKEN,
+        'TELEGRAM_TOKEN': TELEGRAM_TOKEN,
+        'TELEGRAM_CHAT_ID': TELEGRAM_CHAT_ID
+    }
+    for secret_name, secret in secret_list.items():
+        if secret is None:
+            logger.critical(
+                f'Отсутствует переменная окружения: {secret_name}'
+            )
+            return False
     logger.info('Токены проверены.')
     return True
 
